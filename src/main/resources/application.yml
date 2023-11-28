@@ -1,0 +1,22 @@
+server:
+  port : 8080
+
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-route
+          uri: ${USER_ROUTE_URI:http://localhost:8081}
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/v1/api/(?<segment>.*),/api/$\{segment}
+        - id: home-route
+          uri: ${HOME_ROUTE_URI:http://localhost:8082}
+          predicates:
+            - Path=/v2/api/**
+          filters:
+            - RewritePath=/v2/api/(?<segment>.*),/v2/api/$\{segment}
+
+
